@@ -14,11 +14,13 @@ def trapezoidal_method(a, b, n):
 
 def simpson_method(a, b, n):
     if n % 2 != 0:
-        raise ValueError("Число разбиений n должно быть чётным для метода Симпсона.")
+        raise ValueError("Число разбиений n должно быть чётным для метода "
+        "Симпсона.")
 
     h = (b - a) / n
-    return h / 3 * (f(a) + f(b) + sum(2 * f(a + k * h) if k % 2 == 0 else 4 * f(a + k * h) 
-            for k in range(1, n)))
+    return h / 3 * (f(a) + f(b) + sum(2 * f(a + k * h) if k % 2 == 0 
+                                      else 4 * f(a + k * h) 
+                                      for k in range(1, n)))
 
 def runge_method(method, a, b, n, p):
     return (method(a, b, n) - method(a, b, 2*n)) / (2**p - 1)
@@ -50,11 +52,15 @@ def main():
     runge_simp = runge_method(simpson_method, a, b, 32, 4)
 
     # Вывод результатов
-    print(f"{'':<15} {'метод прямоугольников':<20} {'метод трапеций':<20} {'метод Симпсона':<20}")
+    print(f"{'':<15} {'метод прямоугольников':<20} {'метод трапеций':<20}" 
+          f"{'метод Симпсона':<20}")
     print(f"{'n':<15} {rect_n:<20} {trap_n:<20} {simp_n:<20}")
-    print(f"{'I(n)':<15} {rect_val:<20.6f} {trap_val:<20.6f} {simp_val:<20.6f}")
-    print(f"{'R':<15} {runge_rect:<20.6f} {runge_trap:<20.6f} {runge_simp:<20.6f}")
-    print(f"{'I(n) + R':<15} {rect_val + runge_rect:<20.6f} {trap_val + runge_trap:<20.6f}{simp_val + runge_simp:<20.6f}")
+    print(f"{'I(n)':<15} {rect_val:<20.6f} {trap_val:<20.6f}" 
+          f"{simp_val:<20.6f}")
+    print(f"{'R':<15} {runge_rect:<20.6f} {runge_trap:<20.6f}"
+          f"{runge_simp:<20.6f}")
+    print(f"{'I(n) + R':<15} {rect_val + runge_rect:<20.6f} "
+          f"{trap_val + runge_trap:<20.6f}{simp_val + runge_simp:<20.6f}")
 
 if __name__ == "__main__":
     main()
