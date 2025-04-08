@@ -15,12 +15,22 @@ def encode_image(image_path):
         print(f"Error: {e}")
         return None
 
+def append_to_markdown(file_path, content):
+    """Append content to the end of a markdown file."""
+    try:
+        with open(file_path, "a") as md_file:
+            md_file.write(content + "\n")
+    except Exception as e:
+        print(f"Error: {e}")
+
 # Path to your image
-image_path = "lections/lection numeric methods till April_1.jpg"
+image_path = "methods/1.png"
 
 # Getting the base64 string
 base64_image = encode_image(image_path)
-# print(base64_image)
+if base64_image is None:
+    exit(1)  # Exit if encoding failed
+
 api_key = os.environ["MISTRAL_API_KEY"]
 client = Mistral(api_key=api_key)
 
@@ -28,8 +38,17 @@ ocr_response = client.ocr.process(
     model="mistral-ocr-latest",
     document={
         "type": "image_url",
-        "image_url": f"data:image/jpeg;base64,{base64_image}" 
+        "image_url": f"data:image/jpeg;base64,{base64_image}"
     }
 )
-
 print(ocr_response)
+# Assuming ocr_response contains the result in a readable format
+# result_text = ocr_response.get("text", "No text found")
+
+# # Path to your markdown file
+# markdown_path = "results.md"
+
+# # Append the result to the markdown file
+# append_to_markdown(markdown_path, result_text)
+
+# print("OCR result appended to markdown file.")
