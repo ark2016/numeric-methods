@@ -78,7 +78,7 @@ print("x\tЧисленное y\tТочное y\tПогрешность\tпогр
 for xi, yi, e_runge in zip(x_vals, y_vals, runge_errors):
     y_exact = exact_solution(xi)
     error = abs(yi[0] - y_exact)
-    print(f"{xi:.2f}\t{yi[0]:.6f}\t{y_exact:.6f}\t{error:.2e}\t{e_runge:.2e}")
+    print(f"{xi:.2f}\t{yi[0]:.6f}\t{y_exact:.6f}\t{error:.6f}\t{e_runge:.6f}")
 
 # График
 plt.plot(x_vals, y_vals[:, 0], 'o-', label='Рунге-Кутта (адаптивный шаг)')
