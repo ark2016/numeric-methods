@@ -37,9 +37,6 @@ def bisection_method(a, b, eps=0.001, max_iter=1000):
     # Возвращаем середину финального отрезка
     return (a + b) / 2.0, iteration
 
-# Метод Ньютона
-import numpy as np
-
 def newton_method(x0, eps=0.001, max_iter=1000):
     """
     Находит корень уравнения f(x)=0, используя метод Ньютона,
@@ -119,10 +116,10 @@ print("\n=== Результаты метода Ньютона ===")
 for i, (r, it) in enumerate(found_roots_newton):
     print(f"Корень {i+1}: x = {r:.5f}, итераций = {it}")
 
-print("\n=== Результаты WolframAlfa ===")
-print(f"Корень 1 = -3.402679")
-print(f"Корень 2 = 0.683969")
-print(f"Корень 3 = 1.718710")
+# print("\n=== Результаты WolframAlfa ===")
+# print(f"Корень 1 = -3.402679")
+# print(f"Корень 2 = 0.683969")
+# print(f"Корень 3 = 1.718710")
 
 # Шаг 3. Построим график функции и отметим найденные корни
 x_plot = np.linspace(-5, 5, 400)
