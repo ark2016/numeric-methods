@@ -74,7 +74,7 @@ x_vals = np.array(x_vals)
 y_vals = np.array(y_vals)
 
 # Таблица сравнения
-print("x\tЧисленное y\tТочное y\tПогрешность\t R err")
+print("x\tЧисленное y\tТочное y\t abs err\t R err")
 for xi, yi, e_runge in zip(x_vals, y_vals, runge_errors):
     y_exact = exact_solution(xi)
     error = abs(yi[0] - y_exact)
