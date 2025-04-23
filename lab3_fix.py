@@ -53,7 +53,7 @@ while x < x_end - 1e-10:
     # Оценка по правилу Рунге
     y1 = runge_kutta_step(x, y, h) # шаг h
     y2_half = runge_kutta_step(x, y, h/2) # шаг h/2
-    y2 = runge_kutta_step(x + h/2, y2_half, h/2)  # второй шаг h/2
+    y2 = runge_kutta_step(x + h, y2_half, h*2)  # второй шаг h/2
 
     err = np.linalg.norm(y1 - y2) / (2**p - 1)
     runge_errors.append(err)
