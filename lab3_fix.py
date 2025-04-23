@@ -18,7 +18,7 @@ y(x) = 1 + x - e^x * cos(x) + e^x * sin(x)
 x0 = 0
 x_end = 1
 y0 = np.array([0.0, 1.0])
-h = 0.1
+h = 0.5
 eps = 0.001
 p = 4  # порядок метода Рунге-Кутты
 
@@ -42,6 +42,7 @@ def runge_kutta_step(x, y, h):
 # Основной адаптивный цикл
 x_vals = [x0]
 y_vals = [y0]
+step_sizes = []       # добавлено: массив размеров шагов
 x = x0
 y = y0
 runge_errors = []
@@ -49,7 +50,7 @@ runge_errors = []
 while x < x_end - 1e-10:
     if x + h > x_end:
         h = x_end - x  # последний шаг
-    
+
     # Оценка по правилу Рунге
     y1 = runge_kutta_step(x, y, h) # шаг h
     y2_half = runge_kutta_step(x, y, h/2) # шаг h/2
@@ -64,16 +65,17 @@ while x < x_end - 1e-10:
         y = y2  # более точное приближение
         x_vals.append(x)
         y_vals.append(y)
+        step_sizes.append(h)  # сохраняем принятый шаг
 
     # Автоматический подбор нового шага
     fac = (eps/err)**(1/(p+1))
-    fac = min(max(fac, 0.1), 2.0)      # не уменьшать больше чем в 10×, 
-    h = 0.9 * h * fac                  # не увеличивать больше чем в 2×
-
+    fac = min(max(fac, 0.1), 2.0)
+    h = 0.9 * h * fac
 
 # Массивы результатов
 x_vals = np.array(x_vals)
 y_vals = np.array(y_vals)
+step_sizes = np.array(step_sizes)
 
 # Таблица сравнения
 print("x\tЧисленное y\tТочное y\t abs err\t R err")
@@ -82,7 +84,8 @@ for xi, yi, e_runge in zip(x_vals, y_vals, runge_errors):
     error = abs(yi[0] - y_exact)
     print(f"{xi:.2f}\t{yi[0]:.6f}\t{y_exact:.6f}\t{error:.6f}\t{e_runge:.6f}")
 
-# График
+# График решения
+plt.figure(figsize=(10, 6))
 plt.plot(x_vals, y_vals[:, 0], 'o-', label='Рунге-Кутта (адаптивный шаг)')
 plt.plot(x_vals, exact_solution(x_vals), 'r--', label='Точное решение')
 plt.xlabel('x')
@@ -90,4 +93,16 @@ plt.ylabel('y')
 plt.title('Рунге-Кутта с контролем ошибки (по правилу Рунге)')
 plt.grid(True)
 plt.legend()
+plt.show()
+
+# График изменения размера шага
+plt.figure(figsize=(10, 4))
+plt.plot(x_vals[1:], step_sizes, '.-', label='Размер шага h(x)')
+plt.xlabel('x')
+plt.ylabel('Шаг h')
+plt.title('Адаптивный шаг метода Рунге-Кутты')
+plt.yscale('log')
+plt.grid(True)
+plt.legend()
+plt.tight_layout()
 plt.show()
