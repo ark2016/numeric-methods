@@ -19,7 +19,7 @@ x0 = 0.0
 x_end = 1.0
 y0 = np.array([0.0, 1.0]) # [y(0), y'(0)]
 h = 0.5 # Начальный шаг 
-eps = 1e-4  
+eps = 1e-8 
 p = 4  # Порядок метода Рунге-Кутты 
 
 # --- Правая часть системы ОДУ ---
@@ -123,13 +123,9 @@ print("\n--- Результаты ---")
 print(f"Количество принятых шагов: {len(x_vals) - 1}")
 print(f"Минимальный размер принятого шага: {np.min(step_sizes) if len(step_sizes) > 0 else 'N/A'}")
 print(f"Максимальный размер принятого шага: {np.max(step_sizes) if len(step_sizes) > 0 else 'N/A'}")
-print(f"Максимальная оцененная локальная ошибка (для принятых шагов): {np.max(runge_errors_est) if len(runge_errors_est) > 0 else 'N/A'}")
-print(f"Максимальная фактическая ошибка (в узлах принятой сетки): {np.max(actual_errors) if len(actual_errors) > 0 else 'N/A'}")
-print(f"Фактическая ошибка в конечной точке x={x_vals[-1]:.4f}: {actual_errors[-1]:.2e}")
 
 
-# --- Таблица сравнения (улучшенное форматирование) ---
-print("\n--- Таблица: x | Численное y | Точное y | Факт. ошибка (y) | Оценка лок. ошибки ---")
+# --- Таблица сравнения  ---
 header = f"{'x':<8} | {'Численное y':<13} | {'Точное y':<11} | {'Факт. ошибка (y)':<18} | {'Оценка лок. ошибки':<18}"
 print(header)
 print("-" * len(header))
@@ -157,31 +153,28 @@ plt.figure(figsize=(10, 12))
 
 # График решения
 plt.subplot(4, 1, 1)
-plt.plot(x_vals, y_vals[:, 0], 'bo-', label='Численное решение ( + Ричардсон)', markersize=4, linewidth=1)
+plt.plot(x_vals, y_vals[:, 0], 'bo-', label='Численное решение (с уточнением по Ричардсону)', markersize=4, linewidth=1)
 x_dense = np.linspace(x0, x_end, 200)
 plt.plot(x_dense, exact_solution(x_dense), 'r--', label='Точное решение')
 plt.xlabel('x')
 plt.ylabel('y(x)')
-# plt.title(f'Адаптивный РК4 с уточнением Ричардсона (eps = {eps:.1e})')
 plt.grid(True)
 plt.legend()
 
-# График фактической ошибки
+# График абсолютной ошибки
 plt.subplot(4, 1, 2)
-plt.plot(x_vals, actual_errors, 'mo-', label='Фактическая ошибка |y_num - y_exact|', markersize=4)
+plt.plot(x_vals, actual_errors, 'mo-', label='абсолютная ошибка |y_num - y_exact|', markersize=4)
 plt.xlabel('x')
 plt.ylabel('Абсолютная ошибка')
-# plt.title('Фактическая ошибка в узлах сетки')
 plt.yscale('log')
 plt.grid(True)
 plt.legend()
 
-# График оцененной локальной ошибки (по Рунге)
+# График оцененной погрешности(по Рунге)
 plt.subplot(4, 1, 3)
-plt.plot(x_vals[1:], runge_errors_est, 'cs-', label='Оценка локальной ошибки по Рунге', markersize=4)
+plt.plot(x_vals[1:], runge_errors_est, 'cs-', label='Оценка погрешности по Рунге', markersize=4)
 plt.xlabel('x (конец интервала шага)')
-plt.ylabel('Оценка ошибки')
-# plt.title('Оценка локальной ошибки по правилу Рунге')
+plt.ylabel('Оценка погрешности')
 plt.yscale('log')
 plt.grid(True)
 plt.legend()
@@ -192,7 +185,6 @@ plt.subplot(4, 1, 4)
 plt.plot(x_vals[1:], step_sizes, '.-', label='Размер шага h(x)')
 plt.xlabel('x (конец интервала шага)')
 plt.ylabel('Шаг h')
-# plt.title('Адаптивный размер шага')
 plt.yscale('log')
 plt.grid(True)
 plt.legend()
