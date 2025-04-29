@@ -43,7 +43,7 @@ def runge_kutta_step(x, y, h, f_func):
 x_vals = [x0]
 y_vals = [y0]
 step_sizes = []
-runge_errors_est = [] # Оценки локальной ошибки (до экстраполяции)
+runge_errors_est = [] # Оценки погрешности
 actual_errors = [0.0] # Фактическая ошибка в узлах
 
 x = x0
@@ -83,7 +83,7 @@ while x < x_end - 1e-10 and step_count < max_steps:
         
         # --- Уточнение по Ричардсону ---
         # Уточненное значение = Более точное значение (y2_attempt) + Оценка его ошибки
-        # Оценка ошибки y2_attempt ≈ (y2_attempt - y1_attempt) / (2^p - 1)
+        # Оценка погрешности y2_attempt ≈ (y2_attempt - y1_attempt) / (2^p - 1)
         richardson_correction = error_diff_attempt / (2**p - 1)
         y = y2_attempt + richardson_correction 
 
